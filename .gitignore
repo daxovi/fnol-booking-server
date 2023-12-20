@@ -1,1 +1,33 @@
-node_modules
+# Závislosti
+/node_modules
+
+# Log soubory
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+
+# Environment soubory
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Sestavené výstupy
+/dist
+/build
+
+# Další nežádoucí soubory
+.DS_Store
+Thumbs.db
+
+# Specifické pro IDE nebo editor
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+.vscode/
+
+# Další soubory a složky
+# například soukromé klíče, soubory se zálohami, atd.
