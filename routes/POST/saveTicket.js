@@ -7,6 +7,7 @@ saveTicket.post("/save-ticket", (req, res) => {
    const surovina = new ticketModel({
       ticket: ticket,
       email: email,
+      notes: " ",
       date: date
    })
    surovina
@@ -18,7 +19,17 @@ saveTicket.post("/save-ticket", (req, res) => {
          console.log("surovina nebyla uložena");
          res.status(500).json({ error: "Chyba při ukládání ticketu" });
       });
-})
+});
+
+saveTicket.patch("/save-ticket/:id", async (req, res) => {
+   try {
+       const updatedTicket = await ticketModel.findByIdAndUpdate(req.params.id, req.body, { new: true }); // Přidá { new: true } pro získání aktualizovaného dokumentu
+       res.send(updatedTicket); // Odešle aktualizovaný dokument
+   } catch (error) {
+       console.error(error);
+       res.status(500).send(error);
+   }
+});
 
 saveTicket.get("/save-ticket", (req, res) => {
    res.send("Ano, navštívil jsi /save-ticket POSTem");
