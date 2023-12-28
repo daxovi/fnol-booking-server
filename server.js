@@ -19,9 +19,17 @@ db.connect();
 // Povolme přijímat JSON z frontendu
 app.use(express.json({extended:false}));
 
+// CORS
+const corsOptions = {
+    origin: ['https://www.plesfnol.cz', 'https://plesfnol.cz', 'https://admin.daliborjanecek.cz'],
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+
 // GET
-app.use("/", cors(), getMaterials);
-app.use("/", cors(), getTickets);
+app.use("/", getMaterials);
+app.use("/", getTickets);
 
 // POST
 app.use("/", saveMaterial);
