@@ -32,7 +32,7 @@ app.use(cors(corsOptions));
 // Vytvoření instance rate limiteru
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minut
-    max: 1, // limit každé IP na 100 požadavků na okno
+    max: 100, // limit každé IP na 100 požadavků na okno
     message: 'Příliš mnoho požadavků z této IP, zkuste to znovu za 15 minut'
 });
 
