@@ -1,5 +1,7 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
+const rateLimit = require('express-rate-limit');
+
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -26,6 +28,16 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// Vytvoření instance rate limiteru
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minut
+    max: 1, // limit každé IP na 100 požadavků na okno
+    message: 'Příliš mnoho požadavků z této IP, zkuste to znovu za 15 minut'
+});
+
+// Aplikace limiteru na všechny požadavky
+app.use(limiter);
 
 // GET
 app.use("/", getMaterials);
