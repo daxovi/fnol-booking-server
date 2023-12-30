@@ -1,12 +1,16 @@
 const saveTicket = require("express").Router();
 const ticketModel = require("../../models/ticket");
+const { encrypt, decript } = require('../../crypto');
+
 
 saveTicket.post("/save-ticket", (req, res) => {
    const {ticket, email, date} = req.body; // jde dekonstruovat všechny vlastnosti
 
+   let encryptedEmail = encrypt(email);
+
    const surovina = new ticketModel({
       ticket: ticket,
-      email: email,
+      email: encryptedEmail,
       notes: " ",
       date: date
    })

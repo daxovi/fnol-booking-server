@@ -2,7 +2,6 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const rateLimit = require('express-rate-limit');
 
-
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -12,6 +11,7 @@ const db = require("./databaze/connect");
 const getMaterials = require("./routes/GET/getMaterial");
 const saveMaterial = require("./routes/POST/saveMaterial");
 const getTickets = require("./routes/GET/getTickets");
+const getTicketsAdmin = require("./routes/GET/getTicketsAdmin");
 const saveTicket = require("./routes/POST/saveTicket");
 
 const cors = require("cors");
@@ -42,6 +42,7 @@ app.use(limiter);
 // GET
 app.use("/", getMaterials);
 app.use("/", getTickets);
+app.use("/", getTicketsAdmin);
 
 // POST
 app.use("/", saveMaterial);
