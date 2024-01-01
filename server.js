@@ -22,18 +22,9 @@ db.connect();
 // Povolme přijímat JSON z frontendu
 app.use(express.json({extended:false}));
 
-// autentizace
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD; // Heslo uložené v proměnných prostředí
-
-app.use('/admin', basicAuth({
-    users: { 'admin': ADMIN_PASSWORD },
-    challenge: true,
-    realm: 'AdminArea'
-}));
-
 // CORS
 const corsOptions = {
-    origin: ['https://www.plesfnol.cz', 'https://plesfnol.cz', 'https://admin.daliborjanecek.cz'],
+    origin: ['https://admin.plesfnol.cz', 'https://www.plesfnol.cz', 'https://plesfnol.cz', 'https://admin.daliborjanecek.cz'],
     optionsSuccessStatus: 200
 };
 
@@ -48,6 +39,29 @@ const limiter = rateLimit({
 
 // Aplikace limiteru na všechny požadavky
 app.use(limiter);
+
+
+
+
+
+
+// Vytvoření vlastní funkce pro ověření uživatelského jména a hesla
+const myAuthorizer = (username, password) => {
+    const userMatches = basicAuth.safeCompare(username, 'admin');
+    const passwordMatches = basicAuth.safeCompare(password, process.env.ADMIN_PASSWORD);
+
+    return userMatches & passwordMatches;
+};
+
+app.use('/get-tickets-admin', basicAuth({
+    authorizer: myAuthorizer,
+    challenge: true,
+    realm: 'AdminArea'
+}));
+
+
+
+
 
 // GET
 app.use("/", getMaterials);
