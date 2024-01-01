@@ -1,6 +1,7 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
 const rateLimit = require('express-rate-limit');
+const basicAuth = require('express-basic-auth');
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -20,6 +21,15 @@ db.connect();
 // Middleware
 // Povolme přijímat JSON z frontendu
 app.use(express.json({extended:false}));
+
+// autentizace
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD; // Heslo uložené v proměnných prostředí
+
+app.use('/admin', basicAuth({
+    users: { 'admin': ADMIN_PASSWORD },
+    challenge: true,
+    realm: 'AdminArea'
+}));
 
 // CORS
 const corsOptions = {
