@@ -2,7 +2,27 @@ const saveTicket = require("express").Router();
 const ticketModel = require("../../models/ticket");
 const { encrypt, decript } = require('../../crypto');
 
+saveTicket.post("/save-ticket", (req, res) => {
+   // Předpokládáme, že req.body je pole objektů
+   const ticketsData = req.body.map(ticketData => ({
+       ticket: ticketData.ticket,
+       email: encrypt(ticketData.email), // Zašifrování e-mailu
+       notes: " ", // Defaultní hodnota
+       date: ticketData.date
+   }));
 
+   ticketModel.insertMany(ticketsData, { ordered: false })
+       .then(docs => {
+           res.status(200).json({ message: "Všechny tickety úspěšně uloženy", savedTickets: docs });
+       })
+       .catch(err => {
+           console.log("Některé tickety nebyly uloženy");
+           res.status(500).json({ error: "Chyba při ukládání některých ticketů", detail: err });
+       });
+});
+
+
+/*
 saveTicket.post("/save-ticket", (req, res) => {
    const {ticket, email, date} = req.body; // jde dekonstruovat všechny vlastnosti
 
@@ -24,6 +44,7 @@ saveTicket.post("/save-ticket", (req, res) => {
          res.status(500).json({ error: "Chyba při ukládání ticketu" });
       });
 });
+*/
 
 saveTicket.patch("/save-ticket/:id", async (req, res) => {
    try {
