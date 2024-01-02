@@ -85,13 +85,14 @@ const transporter = nodemailer.createTransport({
 
 // Endpoint pro odeslání e-mailu
 app.post("/send-email", (req, res) => {
-    const { to, subject, text } = req.body; // Získání dat z požadavku
+    const { to, subject, text, html } = req.body; // Získání dat z požadavku
 
     const mailOptions = {
         from: process.env.SMTP_USER, // E-mailová adresa odesílatele
         to: to, // Příjemce
         subject: subject, // Předmět
         text: text, // Text e-mailu
+        html: html // Html verze e-mailu
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
