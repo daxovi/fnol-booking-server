@@ -1,6 +1,8 @@
 # Závislosti
 /node_modules
 
+secret.md
+
 # Log soubory
 npm-debug.log
 yarn-error.log
