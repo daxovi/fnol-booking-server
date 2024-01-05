@@ -5,20 +5,22 @@ const { encrypt, decript } = require('../../crypto');
 saveTicket.post("/save-ticket", (req, res) => {
    // Předpokládáme, že req.body je pole objektů
    const ticketsData = req.body.map(ticketData => ({
-       ticket: ticketData.ticket,
-       email: encrypt(ticketData.email), // Zašifrování e-mailu
-       notes: " ", // Defaultní hodnota
-       date: ticketData.date
+      ticket: ticketData.ticket,
+      email: encrypt(ticketData.email), // Zašifrování e-mailu
+      notes: " ", // Defaultní hodnota
+      date: ticketData.date
    }));
 
    ticketModel.insertMany(ticketsData, { ordered: false })
-       .then(docs => {
-           res.status(200).json({ message: "Všechny tickety úspěšně uloženy", savedTickets: docs });
-       })
-       .catch(err => {
-           console.log("Některé tickety nebyly uloženy");
-           res.status(500).json({ error: "Chyba při ukládání některých ticketů", detail: err });
-       });
+      .then(docs => {
+         console.log("Všechny tickety byly úspěšně uloženy");
+         console.log(docs);
+         res.status(200).json({ message: "Všechny tickety úspěšně uloženy", savedTickets: docs });
+      })
+      .catch(err => {
+         console.log("Některé tickety nebyly uloženy");
+         res.status(500).json({ error: "Chyba při ukládání některých ticketů", detail: err });
+      });
 });
 
 
@@ -48,11 +50,12 @@ saveTicket.post("/save-ticket", (req, res) => {
 
 saveTicket.patch("/save-ticket/:id", async (req, res) => {
    try {
-       const updatedTicket = await ticketModel.findByIdAndUpdate(req.params.id, req.body, { new: true }); // Přidá { new: true } pro získání aktualizovaného dokumentu
-       res.send(updatedTicket); // Odešle aktualizovaný dokument
+      const updatedTicket = await ticketModel.findByIdAndUpdate(req.params.id, req.body, { new: true }); // Přidá { new: true } pro získání aktualizovaného dokumentu
+      res.send(updatedTicket); // Odešle aktualizovaný dokument
+      console.log("Podařilo se updatovat dokument");
    } catch (error) {
-       console.error(error);
-       res.status(500).send(error);
+      console.error(error);
+      res.status(500).send(error);
    }
 });
 

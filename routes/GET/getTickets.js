@@ -5,6 +5,7 @@ getTickets.get("/get-tickets", (req, res) => {
     tickets
         .find({})
         .then(function (docs) {
+            console.log("Podařilo se načíst zašifrovanou databázi.");
             return res.json({
                 msg:"Úspěšně se podařilo načíst dokument",
                 documents:docs
