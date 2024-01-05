@@ -22,9 +22,11 @@ db.connect();
 // Povolme přijímat JSON z frontendu
 app.use(express.json({extended:false}));
 
+app.set('trust proxy', 1);
+
 // CORS
 const corsOptions = {
-    origin: ['https://admin.plesfnol.cz', 'https://www.plesfnol.cz', 'https://plesfnol.cz', 'https://admin.daliborjanecek.cz'],
+    origin: ['https://admin.plesfnol.cz', 'https://www.plesfnol.cz', 'https://plesfnol.cz'],
     optionsSuccessStatus: 200
 };
 
@@ -33,8 +35,11 @@ app.use(cors(corsOptions));
 // Vytvoření instance rate limiteru
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minut
-    max: 100, // limit každé IP na 100 požadavků na okno
-    message: 'Příliš mnoho požadavků z této IP, zkuste to znovu za 15 minut'
+    max: 100, // limit každé IP na 100 požadavků za okno
+    handler: function (req, res, next) {
+        console.log(`Rate limit exceeded for ${req.ip}`);
+        res.status(429).send('Příliš mnoho požadavků, zkuste to později.');
+    }
 });
 
 // Aplikace limiteru na všechny požadavky
@@ -100,6 +105,7 @@ app.post("/send-email", (req, res) => {
             return res.status(500).send(error.toString());
         }
         res.status(200).send("E-mail byl úspěšně odeslán: " + info.response);
+        console.log("Email byl úspěšně odeslán na email " + to);
     });
 });
 

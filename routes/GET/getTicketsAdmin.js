@@ -6,6 +6,7 @@ getTicketsAdmin.get("/get-tickets-admin", (req, res) => {
     tickets
         .find({})
         .then(function (tickets) {
+            console.log("Podařilo se načíst databázi.");
             // Dešifrování e-mailů v každém ticketu
             const decryptedTickets = tickets.map(ticket => {
                 if (ticket.email) {
